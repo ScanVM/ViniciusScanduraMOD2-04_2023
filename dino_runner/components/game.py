@@ -20,7 +20,9 @@ class Game:
         self.x_pos_bg = 0
         self.y_pos_bg = 380
         self.score = 0
+        self.final_score = 0
         self.death_count = 0
+        self.comparator = 0
         self.player = Dinosaur()
         self.obstacle_manager = ObstacleManager()
         
@@ -53,11 +55,12 @@ class Game:
         self.player.update(user_input)
         self.obstacle_manager.update(self)
         self.update_score()
-
+        print(self.game_speed)
+        
     def update_score(self):
         self.score += 1
-        if self.score % 1000 == 0:
-            self.game_speed += 5
+        if self.score % 500 == 0:
+            self.game_speed += 3
         
     def draw(self):
         self.clock.tick(FPS)
@@ -79,11 +82,7 @@ class Game:
         self.x_pos_bg -= self.game_speed
 
     def draw_score(self):
-        font = pygame.font.Font(FONT_STYLE, 22)
-        text = font.render(f"Score: {self.score}", True, (0, 0, 0))
-        text_rect = text.get_rect()
-        text_rect_center = (1000, 50)
-        self.screen.blit(text, text_rect_center)
+        self.default_text(f"Score: {self.score}", 850, 15)
 
     def handle_events_on_menu(self):
         for event in pygame.event.get():
@@ -92,6 +91,9 @@ class Game:
                 self.running = False
             elif event.type == pygame.KEYDOWN:
                 self.run()
+            elif event.type == pygame.KEYDOWN and self.death_count > self.comparator:
+                self.final_score = 0
+                self.comparator += 1
 
 
     def show_menu(self):
@@ -99,13 +101,20 @@ class Game:
         half_screen_height = SCREEN_HEIGHT // 2
         half_screen_width = SCREEN_WIDTH // 2
         if self.death_count == 0:
-            font = pygame.font.Font(FONT_STYLE, 22)
-            text = font.render("Press any key to start", True, (0, 0, 0))
-            text_rect = text.get_rect()
-            text_rect_center = (half_screen_width, half_screen_height)
-            self.screen.blit(text, text_rect)
+            self.default_text("PRESS ANY KEY TO START", half_screen_width - 150, half_screen_height - 150)   
         else:
-            self.screen.blit(ICON, (half_screen_width - 20, half_screen_height -140))
+            self.screen.blit(ICON, (half_screen_width - 10, half_screen_height - 50))
+            self.default_text("PRESS A KEY TO PLAY AGAIN", half_screen_width - 150, half_screen_height - 150)
+            self.default_text(f"SCORE REACHED: {self.final_score}", half_screen_width - 130, half_screen_height - 110)
+            self.default_text(f"DEATHS: {self.death_count} ", half_screen_width - 130, half_screen_height - 70)
+            self.game_speed = 20
         
         pygame.display.update()
         self.handle_events_on_menu()
+                  
+    def default_text(self, text_to_display, half_screen_width , half_screen_height):
+            font = pygame.font.Font(FONT_STYLE, 22)
+            text = font.render(text_to_display, True, (0, 0, 0))
+            text_rect = text.get_rect()
+            text_rect_center = (half_screen_width, half_screen_height)
+            self.screen.blit(text, text_rect_center)

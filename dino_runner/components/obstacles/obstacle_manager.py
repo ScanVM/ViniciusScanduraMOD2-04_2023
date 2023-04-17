@@ -35,7 +35,10 @@ class ObstacleManager:
                 pygame.time.delay(500)
                 game.playing = False
                 game.death_count += 1
+                game.final_score = game.score
+                game.score = 0
                 break
+            
 
     def draw (self, screen):
         for obstacle in self.obstacles:

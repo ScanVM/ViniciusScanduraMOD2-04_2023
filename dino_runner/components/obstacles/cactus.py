@@ -16,4 +16,7 @@ class Cactus(Obstacle):
         image = self.cactus[self.choice_cact]
         self.type = random.randint(0,2)
         super().__init__(image, self.type)
-        self.rect.y = 325
+        if self.choice_cact == 1: 
+            self.rect.y = 325
+        else: 
+            self.rect.y = 300 
