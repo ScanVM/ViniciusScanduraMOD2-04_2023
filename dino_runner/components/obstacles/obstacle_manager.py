@@ -38,8 +38,7 @@ class ObstacleManager:
                     pygame.time.delay(500)
                     game.playing = False
                     game.death_count += 1
-                    game.bonus_score = 0
-                    self.hit = 0
+                    self.reset_bonus_score(game)
                     if self.hit > 0:
                         game.final_score = game.bonus_score + game.score
                         game.score = 0
@@ -54,7 +53,7 @@ class ObstacleManager:
                         self.hit += 1
                         game.bonus_score = self.hit * 50
                     else:
-                        game.bonus_score = 0     
+                        self.reset_bonus_score(game)  
                     
                     self.obstacles.remove(obstacle)
     
@@ -62,5 +61,9 @@ class ObstacleManager:
         for obstacle in self.obstacles:
             obstacle.draw(screen)
     
+    def reset_bonus_score(self, game):
+        game.bonus_score = 0
+        self.hit = 0
+
     def reset_obstacles(self):
         self.obstacles = []
