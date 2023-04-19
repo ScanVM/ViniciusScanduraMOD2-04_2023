@@ -10,6 +10,7 @@ class ObstacleManager:
         self.obstacles = []
         self.time_new_obstacle = 0
         self.choice_dic = 0
+        self.hit = 0
     
     def update(self, game):
         
@@ -33,15 +34,24 @@ class ObstacleManager:
         for obstacle in self.obstacles:
             obstacle.update(game.game_speed, self.obstacles)
             if game.player.dino_rect.colliderect(obstacle.rect):
-               if not game.player.has_power_up:
+                if not game.player.has_power_up:
                     pygame.time.delay(500)
                     game.playing = False
                     game.death_count += 1
-                    game.final_score = game.score
-                    game.score = 0
-                    break
-               else:
-                   self.obstacles.remove(obstacle)
+                    if self.hit > 0:
+                        game.final_score = game.score + (self.hit * 4)
+                        game.score = 0
+                        break
+                    else:
+                        game.final_score = game.score
+                        game.score = 0
+                        break
+                else:
+                    if game.player.hammer == True:
+                        self.hit += 1
+                        
+                    self.obstacles.remove(obstacle)
+    
     def draw (self, screen):
         for obstacle in self.obstacles:
             obstacle.draw(screen)

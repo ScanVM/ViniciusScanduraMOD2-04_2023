@@ -54,10 +54,10 @@ class Game:
     def update(self):
         user_input = pygame.key.get_pressed()
         self.player.update(user_input)
-        self.update_score()
         self.obstacle_manager.update(self)
-        self.power_up_manager.update(self.score, self.game_speed, self.player)
-        print(self.game_speed)
+        self.power_up_manager.update(self)
+        self.update_score()
+        #print(self.game_speed)
         
     def update_score(self):
         self.score += 1
