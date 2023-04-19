@@ -18,10 +18,14 @@ class Game:
         self.game_speed = 20
         self.x_pos_bg = 0
         self.y_pos_bg = 380
+        
         self.score = 0
         self.final_score = 0
+        self.bonus_score = 0
         self.death_count = 0
         self.comparator = 0
+        
+        
         self.player = Dinosaur()
         self.obstacle_manager = ObstacleManager()
         self.power_up_manager = PowerUpManager()
@@ -37,6 +41,12 @@ class Game:
     
     def run(self):
         # Game loop: events - update - draw
+        for i in range(3, 0, -1):
+            self.screen.fill((255, 255, 255))
+            self.default_text(str(i), 50, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
+            pygame.display.update()
+            pygame.time.delay(1000)
+        self.bonus_score = 0
         self.playing = True
         self.obstacle_manager.reset_obstacles()
         self.power_up_manager.reset_power_ups()
@@ -63,7 +73,7 @@ class Game:
         self.score += 1
         if self.score % 500 == 0:
             self.game_speed += 3
-        
+
     def draw(self):
         self.clock.tick(FPS)
         self.screen.fill((255, 255, 255)) #Também aceita código hexadecimal "#FFFFFF"
@@ -86,13 +96,14 @@ class Game:
         self.x_pos_bg -= self.game_speed
 
     def draw_score(self):
-        self.default_text(f"Score: {self.score}", 850, 15)
+        self.default_text(f"Score: {self.score}", 22, 850, 15)
+        self.default_text(f"Bonus score: {self.bonus_score}", 22, 850, 50)
 
     def draw_power_up_time(self):
         if self.player.has_power_up:
             time_to_show = round((self.player.power_up_time - pygame.time.get_ticks()) / 1000, 2)
             if time_to_show >= 0:
-                self.default_text(f'{self.player.type.capitalize()} enable for {time_to_show} seconds.', 500, 40)
+                self.default_text(f'{self.player.type.capitalize()} enable for {time_to_show} seconds.', 22, 380, 15)
             else:
                 self.player.has_power_up = False
                 self.player.type = DEFAULT_TYPE
@@ -113,19 +124,19 @@ class Game:
         half_screen_height = SCREEN_HEIGHT // 2
         half_screen_width = SCREEN_WIDTH // 2
         if self.death_count == 0:
-            self.default_text("PRESS ANY KEY TO START", half_screen_width - 150, half_screen_height - 150)   
+            self.default_text("PRESS ANY KEY TO START", 22, half_screen_width - 150, half_screen_height - 150)   
         else:
             self.screen.blit(ICON, (half_screen_width - 10, half_screen_height - 50))
-            self.default_text("PRESS A KEY TO PLAY AGAIN", half_screen_width - 150, half_screen_height - 150)
-            self.default_text(f"SCORE REACHED: {self.final_score}", half_screen_width - 130, half_screen_height - 110)
-            self.default_text(f"DEATHS: {self.death_count} ", half_screen_width - 130, half_screen_height - 70)
+            self.default_text("PRESS A KEY TO PLAY AGAIN", 22, half_screen_width - 150, half_screen_height - 150)
+            self.default_text(f"SCORE REACHED: {self.final_score}", 22, half_screen_width - 130, half_screen_height - 110)
+            self.default_text(f"DEATHS: {self.death_count} ", 22, half_screen_width - 130, half_screen_height - 70)
             self.game_speed = 20
         
         pygame.display.update()
         self.handle_events_on_menu()
                   
-    def default_text(self, text_to_display, half_screen_width , half_screen_height):
-            font = pygame.font.Font(FONT_STYLE, 22)
+    def default_text(self, text_to_display, size_text, half_screen_width , half_screen_height):
+            font = pygame.font.Font(FONT_STYLE, size_text)
             text = font.render(text_to_display, True, (0, 0, 0))
             text_rect = text.get_rect()
             text_rect_center = (half_screen_width, half_screen_height)

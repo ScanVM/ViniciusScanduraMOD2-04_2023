@@ -38,9 +38,12 @@ class ObstacleManager:
                     pygame.time.delay(500)
                     game.playing = False
                     game.death_count += 1
+                    game.bonus_score = 0
+                    self.hit = 0
                     if self.hit > 0:
-                        game.final_score = game.score + (self.hit * 4)
+                        game.final_score = game.bonus_score + game.score
                         game.score = 0
+                        self.hit = 0
                         break
                     else:
                         game.final_score = game.score
@@ -49,7 +52,10 @@ class ObstacleManager:
                 else:
                     if game.player.hammer == True:
                         self.hit += 1
-                        
+                        game.bonus_score = self.hit * 50
+                    else:
+                        game.bonus_score = 0     
+                    
                     self.obstacles.remove(obstacle)
     
     def draw (self, screen):
