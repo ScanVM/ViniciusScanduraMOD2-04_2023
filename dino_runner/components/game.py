@@ -31,10 +31,12 @@ class Game:
         self.death_count = 0
         self.comparator = 0
         
-        
         self.player = Dinosaur()
         self.obstacle_manager = ObstacleManager()
         self.power_up_manager = PowerUpManager()
+
+        pygame.mixer.music.load("dino_runner/assets/Music/fight.wav")
+        pygame.mixer.music.play(-1)
 
     def execute(self):
         self.running = True
