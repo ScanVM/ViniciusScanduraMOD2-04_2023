@@ -37,23 +37,27 @@ class ObstacleManager:
                 if not game.player.has_power_up:
                     pygame.time.delay(500)
                     game.playing = False
+                    game.color_white = 300
+                    game.color_black = 150
+                    game.color_bg = False
                     game.death_count += 1
-                    self.reset_bonus_score(game)
+                    game.final_bonus_score = game.bonus_score
+                    
                     if self.hit > 0:
                         game.final_score = game.bonus_score + game.score
+                        self.best_score(game)
                         game.score = 0
-                        self.hit = 0
+                        self.reset_bonus_score(game)
                         break
                     else:
                         game.final_score = game.score
+                        self.best_score(game)
                         game.score = 0
                         break
                 else:
                     if game.player.hammer == True:
                         self.hit += 1
-                        game.bonus_score = self.hit * 50
-                    else:
-                        self.reset_bonus_score(game)  
+                        game.bonus_score = self.hit * 50  
                     
                     self.obstacles.remove(obstacle)
     
@@ -61,6 +65,10 @@ class ObstacleManager:
         for obstacle in self.obstacles:
             obstacle.draw(screen)
     
+    def best_score(self, game):
+        if game.best_score < game.final_score: 
+            game.best_score = game.final_score
+
     def reset_bonus_score(self, game):
         game.bonus_score = 0
         self.hit = 0
