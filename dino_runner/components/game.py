@@ -2,7 +2,7 @@ import pygame
 
 from dino_runner.components.dinosaur import Dinosaur
 from dino_runner.components.obstacles.obstacle_manager import ObstacleManager
-from dino_runner.utils.constants import BG, ICON, GAME_OVER, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, DEFAULT_TYPE
+from dino_runner.utils.constants import BG, ICON, GAME_OVER, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, DEFAULT_TYPE, DEAD
 from dino_runner.components.power_ups.power_up_manager import PowerUpManager
 FONT_STYLE = "freesansbold.ttf"
 
@@ -61,6 +61,7 @@ class Game:
             self.update()
             self.draw()
             self.dark_mode()
+    
     def events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -73,7 +74,7 @@ class Game:
         self.obstacle_manager.update(self)
         self.power_up_manager.update(self)
         self.update_score()
-        #print(self.game_speed)
+        print(self.game_speed)
         
     def update_score(self):
         self.score += 1
@@ -131,13 +132,13 @@ class Game:
                 self.playing = False
                 self.running = False
             elif event.type == pygame.KEYDOWN:
-                self.run()
+                    self.run()
             elif event.type == pygame.KEYDOWN and self.death_count > self.comparator:
                 self.final_score = 0
                 self.final_bonus_score = 0
                 self.comparator += 1
-                
 
+                
     def show_menu(self):
         self.screen.fill((255, 255, 255))
         half_screen_height = SCREEN_HEIGHT // 2
@@ -151,9 +152,9 @@ class Game:
             self.default_text(f"-Score reached: {self.final_score}", 24, (0, 0, 0), half_screen_width - 130, half_screen_height - 80)
             self.default_text(f"-Bonus score: {self.final_bonus_score}", 24, (0, 0, 0), half_screen_width - 130, half_screen_height - 50)
             self.default_text(f"-Deaths: {self.death_count} ", 24, (0, 0, 0), half_screen_width - 130, half_screen_height - 20)
-            self.default_text("PRESS A KEY TO PLAY AGAIN", 24, (0, 0, 0), half_screen_width - 190, half_screen_height + 220)
+            self.default_text(f"PRESS ANY KEY TO PLAY AGAIN", 24, (0, 0, 0), half_screen_width - 190, half_screen_height + 220)
             self.game_speed = 20
-        
+    
         pygame.display.update()
         self.handle_events_on_menu()
                   
@@ -163,6 +164,8 @@ class Game:
             text_rect = text.get_rect()
             text_rect_center = (half_screen_width, half_screen_height)
             self.screen.blit(text, text_rect_center)
+
+    
 
     def dark_mode(self):
         if self.score >= self.color_black:

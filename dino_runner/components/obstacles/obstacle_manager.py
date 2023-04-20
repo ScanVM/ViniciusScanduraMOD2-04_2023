@@ -57,7 +57,8 @@ class ObstacleManager:
                 else:
                     if game.player.hammer == True:
                         self.hit += 1
-                        game.bonus_score = self.hit * 50  
+                        game.bonus_score = self.hit * 50
+                        game.game_speed += 1  
                     
                     self.obstacles.remove(obstacle)
     

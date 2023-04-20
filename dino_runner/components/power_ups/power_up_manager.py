@@ -16,7 +16,6 @@ class PowerUpManager:
             self.when_appears += random.randint( 200, 300)
             choice_random = random.randint(1,2)
             self.power_ups.append(self.dic_powers[choice_random]())
-            print("gerou")
 
     def update(self, game):
         self.generate_power_up(game.score)
@@ -26,10 +25,11 @@ class PowerUpManager:
                 power_up.start_time = pygame.time.get_ticks()
                 if type(power_up) == Shield:
                     game.player.shield = True
-                    game.game_speed = game.game_speed - 5
+                    game.player.hammer = False
+                    game.game_speed = game.game_speed - 4
                 else:
                     game.player.hammer = True
-                    
+                    game.player.shield = False
                     
                 game.player.has_power_up = True
                 game.player.type = power_up.type
